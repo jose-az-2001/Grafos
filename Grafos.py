@@ -2,37 +2,86 @@
 
 import numpy as np
 
-#metodos
-#con este método se establece un arco o adyacencia entre nodos indicando el 
-#vértice de origen, vértice de destino y el peso o costo de dicho arco
-def arco(nodo_i, nodo_f, costo):
-    None
+
+class Grafo:
+    #constructor
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.matadyacencia = np.zeros([vertices, vertices], dtype=int)
+        self.matcostos = np.zeros([vertices, vertices], dtype=float)
+        self.contarcos = 0
+        
+    def arco(self, nodo_i, nodo_f, costo):
+        self.matadyacencia[nodo_i-1, nodo_f-1] = 1
+        self.matcostos[nodo_i-1, nodo_f-1] = costo
+        self.contarcos = self.contarcos + 1
     
-#se invoca a la matriz de adyacencia del grafo
-def adyacencia():
-    None
-
-#con este método se invoca a la lista de adyacencia del grafo
-def listaAdyacencia():
-    None
-
-#con este método se invoca a la matriz de costos del grafo
-def costos():
-    None
-
-#con este método se indica el vértice a partir del cual se debe iniciar la búsqueda del 
-#circuito de Hamilton y desplegar la lista que indique la trayectoria a seguir y el costo de dicha trayectoria.
-def hamilton(inicio):
-    None
+    def adyacencia(self):
+        print (self.matadyacencia)
+        
+    def listaAdyacencia(self):
+        contador = 0
+        listAd = np.zeros([self.contarcos,2], dtype=int)
+        for i in range (self.vertices):
+            for j in range (self.vertices):
+                if(self.matadyacencia[i,j]!=0):
+                    listAd[contador, 0] = i+1
+                    listAd[contador, 1] = j+1
+                    contador = contador +1
+        print(listAd)
     
-#con este método se aplica el algoritmo de Dijkstra indicando el nodo de inicio y 
-#nodo de finalización, debe desplegar la matriz / vector de costos en cada iteración 
-# del algoritmo y al finalizar mostrar el vector/matriz de la trayectoria a seguir y costo final.
-def dijkstra(nodo_i, nodo_f):
-    None
-    
+    def costos(self):
+        print(self.matcostos)
 
+    def hamilton(self, inicio):
+        disttotal = 0
+        dist = 0
+        nextnode = inicio-1
+        actualnode = inicio-1
+        fin = 0
+        cadena = ""
+        while fin < self.vertices:
+            for i in range (self.vertices):
+                if(self.matcostos[actualnode, i] != 0):
+                    if(dist == 0):
+                        dist = self.matcostos[actualnode, i]
+                        nextnode = i
+                    else:
+                        if(self.matcostos[actualnode, i]<dist):
+                            dist = self.matcostos[actualnode, i]
+                            nextnode = i
+            cadena = cadena + "pasa por grafo: " + str(actualnode + 1)  + " costo: " + str(dist)
+            disttotal = dist + disttotal
+            actualnode = nextnode
+            fin = fin + 1
+        print(disttotal)
+        print(cadena)
+        
+    def dijkstra(self, nodo_i, nodo_f):
+        disttotal = 0
+        dist = 0
+        nextnode = nodo_i-1
+        actualnode = nodo_i-1
+        fin = 0
+        cadena = ""
+        while fin < self.vertices:
+            for i in range (self.vertices):
+                if(self.matcostos[actualnode, i] != 0):
+                    if(dist == 0):
+                        dist = self.matcostos[actualnode, i]
+                        nextnode = i
+                    else:
+                        if(self.matcostos[actualnode, i]<dist):
+                            dist = self.matcostos[actualnode, i]
+                            nextnode = i
+            cadena = cadena + "pasa por grafo: " + str(actualnode + 1)  + " costo: " + str(dist)
+            if(nextnode == nodo_f - 1):
+                fin = self.vertices -2
+            
+            disttotal = dist + disttotal
+            actualnode = nextnode
+            fin = fin + 1
+        print(disttotal)
+        print(cadena)
+            
 
-#Constructor
-def Grafo(vertices):
-    None
